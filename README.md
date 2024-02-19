@@ -7,9 +7,9 @@ Credit for the original source code to rumbledethumps: https://github.com/rumble
 Rumbledethumps' original code was for the llvm-mos-sdk compiler; here it has been ported 
 to the cc65 compiler.
 
-## References:
-*https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
-*https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life)
+### References:
+* [Conway's Game of Life] (https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
+* [Glider in Game of Life] (https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life))
 
 
 ### Linux Tools Install:
