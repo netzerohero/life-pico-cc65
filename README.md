@@ -1,6 +1,16 @@
-# RP6502 VSCode Scaffolding for CC65
+# RP6502 Snake Game using the RP6502 CC65 VSCode
 
-This is scaffolding for a new Picocomputer 6502 software project.
+This is an example project using the Picocomputer 6502 cc65 VSCode scaffolding for John Horton Conway's Game of Life.
+
+Credit for the original source code to rumbledethumps: https://github.com/rumbledethumps/life
+
+Rumbledethumps' original code was for the llvm-mos-sdk compiler; here it has been ported 
+to the cc65 compiler.
+
+## References:
+https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life)
+
 
 ### Linux Tools Install:
  * [VSCode](https://code.visualstudio.com/). This has its own installer.
@@ -23,10 +33,7 @@ This is scaffolding for a new Picocomputer 6502 software project.
  * `winget install -e --id Git.Git`.
 
 ### Getting Started:
-Go to the [GitHub template](https://github.com/picocomputer/vscode-cc65) and
-select "Use this template" then "Create a new repository". GitHub will make a
-clean project for you to start with. Then you can download the repository
-and open the files.
+Clone the repository and build the project with VSCode.
 
 ```
 $ git clone [path_to_github]
