@@ -1,4 +1,4 @@
-# RP6502 Snake Game using the RP6502 CC65 VSCode
+# RP6502 Conway's Game of Life using the RP6502 CC65 VSCode
 
 This is an example project using the Picocomputer 6502 cc65 VSCode scaffolding for John Horton Conway's Game of Life.
 
@@ -8,8 +8,8 @@ Rumbledethumps' original code was for the llvm-mos-sdk compiler; here it has bee
 to the cc65 compiler.
 
 ## References:
-https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
-https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life)
+*https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+*https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life)
 
 
 ### Linux Tools Install:
