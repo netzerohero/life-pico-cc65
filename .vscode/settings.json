@@ -16,6 +16,7 @@
         "Unix Makefiles"
     ],
     "files.associations": {
-        "life.h": "c"
+        "life.h": "c",
+        "stdint.h": "c"
     },
 }

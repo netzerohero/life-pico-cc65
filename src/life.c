@@ -10,7 +10,18 @@
 /* buf[] of current-state used in rule-evaluation */
 uint8_t buf[320 / 8 * 180];
 
-/*static inline*/ void set(int x, int y)
+/*
+ * For the set(), unset(), and get() functions,
+ * since the y-pixel value is less than 240,
+ * using an 8-bit rather than a 16-var improved
+ * loop-speed on cc65 from 96.51 to 94.86-secs (8Mhz-6502).
+ * 
+ * Optimization summary on cc65 (using 'Release' build configuration)
+ *   loop-times went from 102.31-sec down to 94.86-secs.
+ */
+
+
+/*static inline*/ void set(int x, uint8_t y)
 {
     uint8_t bit = 128 >> (x % 8);
 
@@ -20,7 +31,7 @@ uint8_t buf[320 / 8 * 180];
     RIA.rw0 |= bit;
 }
 
-/*static inline*/ void unset(int x, int y)
+/*static inline*/ void unset(int x, uint8_t y)
 {
     uint8_t bit = 128 >> (x % 8);
 
@@ -30,7 +41,7 @@ uint8_t buf[320 / 8 * 180];
     RIA.rw0 &= ~bit;
 }
 
-/*static inline*/ uint8_t get(int x, int y)
+/*static inline*/ uint8_t get(int x, uint8_t y)
 {
     /* changing these vars to statics reduce loop-times from 101.57 to 96.51-secs in cc65 */
     static uint8_t bit;
