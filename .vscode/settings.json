@@ -15,4 +15,7 @@
     "cmake.preferredGenerators": [
         "Unix Makefiles"
     ],
+    "files.associations": {
+        "life.h": "c"
+    },
 }

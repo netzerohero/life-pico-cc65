@@ -32,10 +32,13 @@ uint8_t buf[320 / 8 * 180];
 
 /*static inline*/ uint8_t get(int x, int y)
 {
-    uint8_t bit = 128 >> (x % 8);
+    /* changing these vars to statics reduce loop-times from 101.57 to 96.51-secs in cc65 */
+    static uint8_t bit;
+    static unsigned addr;
 
-    unsigned addr = (x / 8) + (320 / 8 * y);
-//  uint8_t bit = 128 >> (x % 8);
+    bit = 128 >> (x % 8);
+    addr = (x / 8) + (320 / 8 * y);
+
     return buf[addr] & bit ? 1 : 0;  //is cell alive or dead?
 }
 
