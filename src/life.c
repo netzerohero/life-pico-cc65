@@ -1,9 +1,13 @@
 #include <rp6502.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <time.h> /* for clock() instrumentation; 
+                   * needs cc65 w/ pico6502 lib support; 
+                   * build cc65 locally from pico's repo.
+                   */ 
 #include "life.h"
 
-
+/* buf[] of current-state used in rule-evaluation */
 uint8_t buf[320 / 8 * 180];
 
 /*static inline*/ void set(int x, int y)
@@ -32,7 +36,7 @@ uint8_t buf[320 / 8 * 180];
 
     unsigned addr = (x / 8) + (320 / 8 * y);
 //  uint8_t bit = 128 >> (x % 8);
-    return buf[addr] & bit ? 1 : 0;
+    return buf[addr] & bit ? 1 : 0;  //is cell alive or dead?
 }
 
 /*static*/ void setup(void)
@@ -52,11 +56,18 @@ uint8_t buf[320 / 8 * 180];
     xram0_struct_set(0xFF00, vga_mode3_config_t, xram_data_ptr, 0);
     xram0_struct_set(0xFF00, vga_mode3_config_t, xram_palette_ptr, 0xFFFF);
 
+#if 1
+    /* Initially clear the screen in XRAM.*/
     RIA.addr0 = 0;
     RIA.step0 = 1;
     for (/*unsigned*/ i = sizeof(buf); i--;)
         RIA.rw0 = 0;
+#endif /*0*/
 
+    /* 
+     * Initial condition: Glider
+     *  Reference: https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life)
+     */
     set(11, 20);
     set(12, 21);
     set(10, 22);
@@ -66,20 +77,40 @@ uint8_t buf[320 / 8 * 180];
 
 /*static*/ void next(void)
 {
-    uint16_t i;
-    uint16_t x;
-    uint8_t  y;
-    uint8_t neighbors;
+    /* static vars rather than automatic - for speed */
+    /* 
+     * With phi2 == 8000 == 8Mhz-6502, loop times
+     * decreased from 102.31-sec to 101.57-seconds.
+     */
 
+    static uint16_t i;
+    static uint16_t x;
+    static uint8_t  y;
+    static uint8_t neighbors;
+
+    /* Keep a copy of current state in buf[] (from video screen's XRAM) */
     RIA.addr0 = 0;
     RIA.step0 = 1;
     for (/*unsigned*/ i = 0; i < sizeof(buf); i++)
         buf[i] = RIA.rw0;
 
+
     for (/*int*/ x = 1; x < 319; x++)
     {
         for (/*int*/ y = 1; y < 179; y++)
         {
+
+            /* 
+             * Evaluate life/death rules
+             *  Reference: https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+             * 
+             *  1. Any live cell with fewer than two live neighbors dies, as if by underpopulation.
+             *  2. Any live cell with two or three live neighbors lives on to the next generation.
+             *  3. Any live cell with more than three live neighbors dies, as if by overpopulation.
+             *  4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+             * 
+             */
+
             /*uint8_t*/ neighbors =
                 get(x - 1, y - 1) +
                 get(x, y - 1) +
@@ -91,29 +122,50 @@ uint8_t buf[320 / 8 * 180];
                 get(x + 1, y + 1);
             if (get(x, y))
             {
+                // Rules #1 & #3
                 if (neighbors != 2 && neighbors != 3)
-                    unset(x, y);
+                    unset(x, y); //death
             }
             else
             {
+                // Rule #4
                 if (neighbors == 3)
-                    set(x, y);
+                    set(x, y); //birth
             }
-        }
-    }
-}
+
+              // Rule #2 - Any live cell with two or three live neighbors lives on to the next generation.
+              /* Sustain life - do nothing */
+
+        } //end for(y)
+    } // end for(x)
+} // end next()
+
 
 void main(void)
 {
     uint16_t i;
+    uint32_t clock_old;
+    uint32_t clock_now;
+
 
     printf("Setting up screen for Life\n");
     setup();
 
-    for (/*int*/ i = 500; i--;)
-//      printf("loop i= %d\n", i);
+    for (/*int*/ i = 500; i>0; i--)
+    {
+
+        clock_now = clock();
+        if (i==500) clock_old = clock_now;
+        printf("loop i= %d clock()= 0x%lx delta=%ld \n", i, clock_now, (clock_now - clock_old) );
+
         next();
+        clock_old = clock_now;
+
+    } //end for(i)
 
     // while (1)
     //     ;
-}
+
+    printf("Done.\n");
+
+} //end main()
