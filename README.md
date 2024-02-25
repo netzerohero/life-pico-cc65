@@ -7,6 +7,10 @@ Credit for the original source code to rumbledethumps: https://github.com/rumble
 Rumbledethumps' original code was for the llvm-mos-sdk compiler; here it has been ported 
 to the cc65 compiler.
 
+Be patient: A life generation takes about 100-seconds (@ 8-Mhz-6502) for this cc65 code.
+Screen size is 320 x 180 x 1bpp. Read code-comments for more information. 
+This code is an excellent basis for studying code optimization and computational efficiency.
+
 ### References:
 * [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)
 * [Glider in Game of Life](https://en.wikipedia.org/wiki/Glider_(Conway's_Game_of_Life))
